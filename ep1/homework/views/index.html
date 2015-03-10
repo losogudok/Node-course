@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 1</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css"/>
+    <script defer="true" src="/static/js/jquery.min.js"></script>
+    <script defer="true" src="/static/js/script.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="col-lg-12 col-md-12">
+        <div class="row">
+            <h1>Create and Read files</h1>
+        </div>
+        <form action="/files" role="form" method="post">
+            <div class="row">
+                <div class="form-group col-lg-3 col-md-3">
+                    <div class="row">
+                        <label for="fileName">File Name</label>
+                        <input type="text" id="fileName" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="fileContents">File Contents</label>
+                    <textarea name="" id="fileContents" cols="30" rows="10" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="row">
+                        <button id="saveFile" type="submit" class="btn btn-primary btn-block">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <h2>Current files</h2>
+            <ul class="list-group" id="filesList">
+                <template id="listItemTmpl">
+                    <li class="list-group-item row">
+                        <a href="" class="pull-left"></a>
+                        <button class="btn btn-danger pull-right jsDeleteFile">Delete</button>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
