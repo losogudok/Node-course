@@ -12,7 +12,7 @@ server.on('request', onRequest);
 function onRequest(req, res) {
     var pathname = url.parse(req.url).pathname;
 
-    //console.log('Got request: ' + req.url);
+    console.log('Got request: ' + req.url);
     router.navigate(pathname, req, res);
 }
 

@@ -36,6 +36,10 @@ describe('Server', function () {
         utils.emptyDir(filesDir);
     });
 
+    afterAll(function(){
+        fs.mkdirSync(filesDir);
+    });
+
     describe('Routes', function () {
         describe('POST /files', function () {
             it('Should save file', function (done) {
