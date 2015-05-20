@@ -13,7 +13,7 @@ function ajaxFiles(req, res) {
         case 'GET':
             fs.readdir(config.filesDir, function(err, files){
                 if (err) {
-                    ctrs.internalErr(req, res);
+                    return ctrs.internalErr(req, res);
                 }
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.write(JSON.stringify({

@@ -20,10 +20,10 @@ function ajaxFile(req, res) {
 
             rs.on('error', function(){
                 if (err.code == 'ENOENT') {
-                    ctrs.notFound(req, res);
+                    return ctrs.notFound(req, res);
                 } 
                 else {
-                    ctrs.internalErr(req, res);
+                    return ctrs.internalErr(req, res);
                 }
             });
 
@@ -56,7 +56,7 @@ function ajaxFile(req, res) {
         case 'DELETE':
             fs.unlink(filepath, function (err) {
                 if (err) {
-                    ctrs.internalErr(req, res);
+                    return ctrs.internalErr(req, res);
                 }
                 res.writeHead(200, 'OK');
                 res.end();
