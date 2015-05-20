@@ -8,10 +8,7 @@ var app = {
         saveFileBtn: $('#saveFile'),
         listItemTmpl: $('#listItemTmpl'),
         dialog: $('#dialog')
-    }
-};
-
-var appProto = {
+    },
     init:  function() {
         this.bindListeners();
         this.updateFileList();
@@ -90,7 +87,6 @@ var appProto = {
     }
 };
 
-Object.setPrototypeOf(app, appProto);
 app.init();
 
 })(document, window, jQuery);

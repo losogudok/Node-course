@@ -1,6 +1,8 @@
 var controllers = require('./controllers');
 
 module.exports = function(routes) {
+    "use strict";
+
     return {
         navigate: function(path, req, res) {
             var route = this.findRoute(path);
