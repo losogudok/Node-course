@@ -1,0 +1,1 @@
+var sequalize = require('sequalize');

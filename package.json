@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "node course",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^4.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.3.0"
+  },
   "devDependencies": {
     "jasmine": "^2.2.1",
     "jasmine-core": "^2.2.0",
