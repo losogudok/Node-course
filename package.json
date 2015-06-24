@@ -1,36 +1,11 @@
 {
-  "name": "Node-course",
-  "version": "1.0.0",
-  "description": "node course",
-  "main": "index.js",
+  "name": "application-name",
+  "version": "0.0.1",
   "dependencies": {
+    "jasmine": "^2.3.1",
     "pg": "^4.4.0",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^3.3.0"
-  },
-  "devDependencies": {
-    "jasmine": "^2.2.1",
-    "jasmine-core": "^2.2.0",
-    "karma": "^0.12.31",
-    "karma-jasmine": "^0.3.5",
-    "rimraf": "^2.3.4",
-    "superagent": "^1.1.0",
-    "supertest": "^0.15.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/losogudok/Node-course.git"
-  },
-  "keywords": [
-    "node.js"
-  ],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/losogudok/Node-course/issues"
-  },
-  "homepage": "https://github.com/losogudok/Node-course"
+    "rimraf": "^2.4.0",
+    "superagent": "^1.2.0",
+    "supertest": "^1.0.1"
+  }
 }
