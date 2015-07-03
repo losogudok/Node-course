@@ -1,7 +1,6 @@
 var pg = require('pg');
+var _ = require('lodash');
 
 module.exports = function(config) {
-    pg.connect(config, function(){
-
-    });
+    _.extend(pg.defaults, config);
 };

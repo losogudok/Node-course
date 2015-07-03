@@ -1,15 +1,10 @@
 var pg = require('pg');
 var Connection = pg.Connection;
 var Client = pg.Client;
-var dbConf = require('./dbConf');
+var dbConf = require('./db_сonf');
+var _ = require('lodash');
 
-var testClient = new Client({
-    user: 'postgres',
-    password: 'postgres',
-    database: 'test',
-    port: 5432,
-    host: 'localhost'
-});
+var testClient = new Client(dbConf);
 
 testClient.on('error', function(err){
     console.log(err);
@@ -29,13 +24,11 @@ function connect(client) {
 function createDatabase(err) {
     console.log('Connection error, trying to create database');
     return new Promise(function(resolve, reject){
-        var postgresClient = new Client({
-            user: 'postgres',
-            password: 'postgres',
-            database: 'postgres',
-            port: 5432,
-            host: 'localhost'
+        var defaultConf = _.extend({}, dbConf, {
+            database: 'postgres'
         });
+
+        var postgresClient = new Client(defaultConf);
         postgresClient.connect(function(err){
             if (err) reject(err);
 
