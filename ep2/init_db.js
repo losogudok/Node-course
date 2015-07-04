@@ -6,11 +6,6 @@ var _ = require('lodash');
 
 var testClient = new Client(dbConf);
 
-testClient.on('error', function(err){
-    console.log(err);
-});
-
-
 function connect(client) {
     return new Promise(function(resolve, reject){
         client.connect(function(err){
@@ -64,7 +59,7 @@ function createSchema(client) {
 
 function createTable(client) {
     return new Promise(function(resolve, reject){
-        client.query('CREATE TABLE users (id integer PRIMARY KEY, name varchar(200), login varchar(100), password varchar(100));', function(err){
+        client.query('CREATE TABLE users (id serial PRIMARY KEY, name varchar(200), login varchar(100), password varchar(100));', function(err){
             if (err) return reject(err);
             console.log('user table created');
             resolve(client);

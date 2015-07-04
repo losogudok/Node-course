@@ -1,25 +1,25 @@
 var http = require('http');
-var dbConf = require('./db_сonf');
-var db = require('./db')(dbConf);
+var appConf = require('./config');
+var url = require('url');
+var appRoutes = require('./routes');
+var db = require('./db').initDb(appConf.postgres);
 var server = http.createServer();
-var base = require('./models/base');
+var router = require('./router')(appRoutes);
+var BaseModel = require('./models/base');
 
-server.on('request', function onRequest(req, res){
-    if (req.url === '/user' && req.method === 'POST') {
-        base.create('users', {
-            name: 'Vasya',
-            login: 'Superman',
-            password: 'Vuperman'
-        })
-        .then(function(result){
-            console.log(result);
-            res.end(result);
-        })
-        .catch(function(err){
-            console.log(err);
-            res.end(err);
-        });
-    }
+console.log('Node version: ' + process.version);
+
+server.on('request', onRequest);
+
+function onRequest(req, res) {
+    var pathname = url.parse(req.url).pathname;
+
+    console.log('Got request: ' + req.url);
+    router.navigate(pathname, req, res);
+}
+
+server.listen(appConf.port, function(){
+    console.log('Server listening on port ' + appConf.port);
 });
 
-server.listen(3000);
+module.exports = server;

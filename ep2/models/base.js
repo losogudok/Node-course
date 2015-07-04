@@ -9,6 +9,9 @@ class BaseModel {
             pg.connect(function(err, client, done){
                 var columns = Object.keys(data);
                 var values = columns.map(function(col){
+                    if (typeof data[col] === 'string') {
+                        return `'${data[col]}'`
+                    }
                     return data[col];
                 });
                 var query;
@@ -30,16 +33,61 @@ class BaseModel {
             });
         });
     }
-    static update(id, data) {
+    static updateById(table, id, data) {
+        return new Promise(function(resolve, reject){
+            pg.connect(function(err, client, done){
+                var values = Object.keys(data).map(function(column){
+                    var value = (typeof data[column] === 'string') ? `'${data[column]}'` : data[column];
+                    return `${column} = ${value}`;
+                });
+                var query;
 
+                query = `UPDATE ${table} SET ${values} WHERE id = ${id}`;
+                console.log(query);
+                client.query(query, function(err, result){
+                    if (err) {
+                        done();
+                        return reject(err);
+                    }
+                    resolve(result);
+                    done();
+                });
+            });
+        });
     }
 
-    static remove(id) {
-
+    static removeById(table, id) {
+        return new Promise(function(resolve, reject){
+            pg.connect(function(err, client, done){
+                var query = `DELETE FROM ${table} WHERE id = ${id}`;
+                console.log(query);
+                client.query(query, function(err, result){
+                    if (err) {
+                        done();
+                        return reject(err);
+                    }
+                    resolve(result);
+                    done();
+                });
+            });
+        });
     }
 
-    static find(id) {
-
+    static findById(table, id) {
+        return new Promise(function(resolve, reject){
+            pg.connect(function(err, client, done){
+                var query = `SELECT FROM ${table} WHERE id = ${id}`;
+                console.log(query);
+                client.query(query, function(err, result){
+                    if (err) {
+                        done();
+                        return reject(err);
+                    }
+                    resolve(result);
+                    done();
+                });
+            });
+        });
     }
 }
 
