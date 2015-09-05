@@ -5,7 +5,7 @@ var appRoutes = require('./routes');
 var db = require('./db').initDb(appConf.postgres);
 var server = http.createServer();
 var router = require('./router')(appRoutes);
-var BaseModel = require('./models/base');
+
 
 console.log('Node version: ' + process.version);
 
@@ -18,8 +18,14 @@ function onRequest(req, res) {
     router.navigate(pathname, req, res);
 }
 
-server.listen(appConf.port, function(){
-    console.log('Server listening on port ' + appConf.port);
-});
+if (!module.parent) {
+    server.listen(appConf.port, function(){
+        console.log('Server listening on port ' + appConf.port);
+    });
+}
+else {
+    module.exports = server;
+}
 
-module.exports = server;
+
+

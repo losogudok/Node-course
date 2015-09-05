@@ -21,14 +21,14 @@ function staticFile(req, res) {
     };
     var rs = fs.createReadStream(filepath);
 
-    rs.pipe(res);
+
     rs.on('open', function(){
         var mimeType = mimeTypes[path.extname(filepath).split(".")[1]];
         res.writeHead(200, 'OK', {'Content-Type': mimeType });
     });
 
     rs.on('error', function(err){
-        if (err.code == 'ENOENT') {
+        if (err.code === 'ENOENT') {
             handlers.notFound(req, res);
         }
         else {
@@ -36,9 +36,7 @@ function staticFile(req, res) {
         }
     });
 
-    req.on('close', function () {
-        rs.destroy();
-    });
+	rs.pipe(res);
 }
 
 module.exports = staticFile;

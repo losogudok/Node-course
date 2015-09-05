@@ -1,6 +1,5 @@
 module.exports =  {
-    "^\/$": "home",
-    "^\/users$": "users",
-    "^\/users\/.*\..*$": "user",
-    "^\/static\/.*": "static"
+	"^\/api\/users\/(\\d+)\/?$": "users",
+	"^\/static\/.*": "static",
+	"^.*$": "home"
 };

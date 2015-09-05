@@ -1,26 +1,36 @@
 var handlers = require('./handlers');
+var runner = require('./runner');
 
 module.exports = function(routes) {
     "use strict";
 
     return {
         navigate: function(path, req, res) {
-            var handlerName = this.findRoute(path);
+            var handler = this.findRoute(path);
 
-            if (handlerName) {
-                handlers[handlerName](req, res);
+            if (handler) {
+	            if (handler.params.length > 0) {
+		            req.params = handler.params;
+	            }
+                runner(handlers[handler.name](req, res));
             } 
             else {
-                handlers.notFound(req, res);
+                runner(handlers.notFound(req, res));
             }
         },
         findRoute: function(path) {
             for (let route in routes) {
                 let re = new RegExp(route);
-                if (re.test(path)) {
-                    return routes[route];
+	            let match = path.match(re);
+
+                if (match) {
+                    return {
+	                    name: routes[route],
+	                    params: match.slice(1)
+                    }
                 }
             }
+
             return false;
         }
     };

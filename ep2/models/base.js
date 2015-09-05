@@ -21,7 +21,7 @@ class BaseModel {
                     return reject(err);
                 }
                 query = `INSERT INTO ${table} (${columns}) VALUES (${values})`;
-                console.log(query);
+
                 client.query(query, function(err, result){
                     if (err) {
                         done();
@@ -43,7 +43,7 @@ class BaseModel {
                 var query;
 
                 query = `UPDATE ${table} SET ${values} WHERE id = ${id}`;
-                console.log(query);
+
                 client.query(query, function(err, result){
                     if (err) {
                         done();
@@ -60,7 +60,7 @@ class BaseModel {
         return new Promise(function(resolve, reject){
             pg.connect(function(err, client, done){
                 var query = `DELETE FROM ${table} WHERE id = ${id}`;
-                console.log(query);
+
                 client.query(query, function(err, result){
                     if (err) {
                         done();
@@ -76,19 +76,39 @@ class BaseModel {
     static findById(table, id) {
         return new Promise(function(resolve, reject){
             pg.connect(function(err, client, done){
-                var query = `SELECT FROM ${table} WHERE id = ${id}`;
-                console.log(query);
+                var query = `SELECT * FROM ${table} WHERE id = ${id}`;
+
                 client.query(query, function(err, result){
                     if (err) {
                         done();
                         return reject(err);
                     }
-                    resolve(result);
+	                if (result.rows.length === 0) {
+		                return reject('Not found');
+	                }
+                    resolve(result.rows[0]);
                     done();
                 });
             });
         });
     }
+
+	static findAll(table) {
+		return new Promise(function(resolve, reject){
+            pg.connect(function(err, client, done){
+                var query = `SELECT * FROM ${table}`;
+
+                client.query(query, function(err, result){
+                    if (err) {
+                        done();
+                        return reject(err);
+                    }
+                    resolve(result.rows);
+                    done();
+                });
+            });
+        });
+	}
 }
 
 module.exports = BaseModel;

@@ -2,87 +2,81 @@
 
 var app = {
     elems: {
-        fileContents: $('#fileContents'),
-        fileName: $('#fileName'),
-        filesList: $('#filesList'),
-        saveFileBtn: $('#saveFile'),
-        listItemTmpl: $('#listItemTmpl'),
-        dialog: $('#dialog')
+        userName: $('#userName'),
+        userLogin: $('#userLogin'),
+        userPassword: $('#userPassword'),
+	    userId: $('#userId'),
+        saveBtn: $('#save'),
+	    deletBtn: $('#del'),
+        userTmpl: $('#userTmpl'),
+        userList: $('#userList')
     },
     init:  function() {
+	    var match = location.pathname.match(/^\/users\/(\d+)\/?$/);
+
         this.bindListeners();
-        this.updateFileList();
+	    if (match) {
+		    this.getUser(match[1]);
+	    }
     },
     bindListeners: function() {
         var elems = this.elems;
+	    var self = this;
 
-        elems.filesList.on('click', 'a', this.getFile.bind(this));
-        elems.filesList.on('click', '.jsDeleteFile', this.deleteFile.bind(this));
-        elems.saveFileBtn.on('click', this.saveFile.bind(this));
+	    elems.deletBtn.on('click',function(e){
+		    e.preventDefault();
+		    var id = elems.userId.val();
+		    if (id) {
+			    self.deleteUser(id);
+		    }
+	    });
+        elems.saveBtn.on('click', function(e){
+	        e.preventDefault();
+	        self.saveUser();
+        });
     },
-    getFile: function(e) {
+    getUser: function(id) {
         var self = this;
-        var filelink = e.target.href;
-        var fileName = e.target.textContent;
 
-        e.preventDefault();
-        $.get(filelink)
-            .done(function(response){
-                self.elems.fileName.val(fileName);
-                self.elems.fileContents.text(response);
+        $.get(`/api/users/${id}`)
+            .done(function(res){
+		        self.elems.userId.val(res.id);
+                self.elems.userName.val(res.name);
+                self.elems.userLogin.val(res.login);
+                self.elems.userPassword.val(res.password);
             })
             .fail(function(){
-                alert('Failed to get file');
+                alert('Failed to get user');
             });
     },
-    deleteFile: function(e) {
-        var self = this;
-        var link = $(e.target).siblings('a').attr('href');
-
+    deleteUser: function(id) {
         $.ajax({
-            url: link,
+            url: `/api/users/${id}`,
             type: 'DELETE'
         })
         .done(function(){
-            self.updateFileList();
+	        location.replace('/');
         })
         .fail(function(){
             alert('Failed to delete file');
         })
     },
-    saveFile: function(e) {
-        e.preventDefault();
-
+    saveUser: function() {
         var self = this;
         var elems = self.elems;
-        var name = elems.fileName.val().trim();
-        var data = elems.fileContents.val();
+	    var data = {};
 
-        $.post('/files/' + name, data)
-            .done(function(){
-                self.updateFileList();
-                alert('File saved');
+	    data.name = elems.userName.val().trim();
+        data.login = elems.userLogin.val().trim();
+        data.password = elems.userPassword.val();
+
+        $.post('/api/users/', JSON.stringify(data))
+            .done(function(res){
+                alert('User saved');
+		        self.elems.userId(res.id);
             })
             .fail(function(){
-                alert('Failed to save file');
-            });
-    },
-    updateFileList: function() {
-        var list = this.elems.filesList;
-        var listItemTmpl = this.elems.listItemTmpl[0].content.cloneNode(true);
-
-        $.get('/files')
-            .done(function(response){
-                list.empty();
-                response.data.forEach(function(item, index){
-                    var $a = $(listItemTmpl.querySelector('a'));
-
-                    $a.text(item).attr('href', '/files/' + item);
-                    list.append(listItemTmpl.cloneNode(true));
-                });
-            })
-            .fail(function(){
-                alert('Failed to get list of files');
+                alert('Failed to save user');
             });
     }
 };
