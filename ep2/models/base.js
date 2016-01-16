@@ -49,7 +49,7 @@ class BaseModel {
                         done();
                         return reject(err);
                     }
-                    resolve(result);
+                    resolve(result.rows[0]);
                     done();
                 });
             });
@@ -84,7 +84,7 @@ class BaseModel {
                         return reject(err);
                     }
 	                if (result.rows.length === 0) {
-		                return reject('Not found');
+		                return resolve(null);
 	                }
                     resolve(result.rows[0]);
                     done();

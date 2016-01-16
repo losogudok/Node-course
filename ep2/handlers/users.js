@@ -43,7 +43,6 @@ module.exports = function* (req, res) {
             res.end();
 		}
 		catch(e) {
-			console.log(e);
 			handlers.internalErr(req, res);
 		}
 		break;
@@ -52,14 +51,13 @@ module.exports = function* (req, res) {
 		id = req.params[0];
 		try {
 			user = yield BaseModel.updateById('users', id, json);
-			res.writeHead(200, {
+			res.writeHead(200, 'OK', {
 				'Content-Type': 'application/json'
 			});
 			res.write(JSON.stringify(user));
             res.end();
 		}
 		catch(e) {
-			console.log(e);
 			handlers.internalErr(req, res);
 		}
 		break;
@@ -67,14 +65,11 @@ module.exports = function* (req, res) {
 		case 'DELETE':
 		id = req.params[0];
         try {
-	        user = yield BaseModel.removeById('users', id);
-	        res.writeHead(200, {
-				'Content-Type': 'application/json'
-			});
+	        yield BaseModel.removeById('users', id);
+	        res.writeHead(200, 'OK');
 	        res.end();
         }
         catch(e) {
-	        console.log(e);
 			handlers.internalErr(req, res);
         }
 		break;
@@ -88,6 +83,9 @@ module.exports = function* (req, res) {
 	        }
 	        else {
 		        user = yield BaseModel.findById('users', id);
+		        if (!user) {
+			        return handlers.notFound(req, res);
+		        }
 	        }
 	        res.writeHead(200, {
 				'Content-Type': 'application/json'
@@ -96,7 +94,6 @@ module.exports = function* (req, res) {
             res.end();
         }
 		catch(e) {
-			console.log(e);
 			handlers.internalErr(req, res);
 		}
 		break;
